@@ -1,0 +1,65 @@
+import java.util.Scanner;
+import java.util.concurrent.TimeUnit;
+
+public class Main {
+
+    public static void main(String[] args) {
+        String paragraph = "Java is a popular programming language. It is platform-independent and widely used in web and mobile application development.";
+        
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("💡 Typing Speed Test");
+        System.out.println("--------------------------------------------------");
+        System.out.println("Type the following paragraph as fast and accurately as you can:");
+        System.out.println("\n\"" + paragraph + "\"\n");
+        System.out.println("⏳ Press Enter to start...");
+        scanner.nextLine();
+
+        // Start timer
+        long startTime = System.nanoTime();
+
+        System.out.println("\nStart typing below:");
+        String typed = scanner.nextLine();
+
+        // End timer
+        long endTime = System.nanoTime();
+        long timeTakenNano = endTime - startTime;
+        double timeTakenSeconds = timeTakenNano / 1_000_000_000.0;
+
+        // Word count
+        int totalWords = paragraph.split(" ").length;
+        int typedWords = typed.trim().split(" ").length;
+        int correctWords = countCorrectWords(paragraph, typed);
+
+        // Metrics
+        double wpm = (typedWords / timeTakenSeconds) * 60;
+        int mistakes = typedWords - correctWords;
+        double accuracy = (correctWords / (double) totalWords) * 100;
+
+        // Display results
+        System.out.println("\n-------------------- 📝 Results --------------------");
+        System.out.printf("Time Taken       : %.2f seconds\n", timeTakenSeconds);
+        System.out.printf("Typed Words      : %d\n", typedWords);
+        System.out.printf("Correct Words    : %d\n", correctWords);
+        System.out.printf("Mistakes         : %d\n", mistakes);
+        System.out.printf("Typing Speed     : %.2f WPM\n", wpm);
+        System.out.printf("Accuracy         : %.2f%%\n", accuracy);
+        System.out.println("--------------------------------------------------");
+
+        scanner.close();
+    }
+
+    private static int countCorrectWords(String original, String typed) {
+        String[] origWords = original.trim().split("\\s+");
+        String[] typedWords = typed.trim().split("\\s+");
+
+        int correct = 0;
+        int minLength = Math.min(origWords.length, typedWords.length);
+        for (int i = 0; i < minLength; i++) {
+            if (origWords[i].equalsIgnoreCase(typedWords[i])) {
+                correct++;
+            }
+        }
+        return correct;
+    }
+}
